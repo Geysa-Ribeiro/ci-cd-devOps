@@ -1,0 +1,32 @@
+name: Java CI
+
+on:
+  push:        # roda sempre que você fizer um push
+  pull_request: # e também em PRs
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Baixa o repositório
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Configura o Java
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 3. Compila os arquivos
+      - name: Compile Java code
+        run: |
+          mkdir -p bin
+          javac -d bin src/*.java tests/*.java
+
+      # 4. Executa os testes
+      - name: Run tests
+        run: |
+          java -cp bin CalculadoraTest
